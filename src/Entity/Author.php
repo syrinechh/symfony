@@ -14,37 +14,50 @@ class Author
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $username = null;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    private ?string $lastName = null;
 
+    #[ORM\Column(type: 'integer')]
+    private int $nbBooks = 0;
+
+    // === Getters & Setters ===
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUsername(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->username;
+        return $this->firstName;
     }
 
-    public function setUsername(string $username): static
+    public function setFirstName(string $firstName): self
     {
-        $this->username = $username;
-
+        $this->firstName = $firstName;
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getLastName(): ?string
     {
-        return $this->email;
+        return $this->lastName;
     }
 
-    public function setEmail(string $email): static
+    public function setLastName(string $lastName): self
     {
-        $this->email = $email;
+        $this->lastName = $lastName;
+        return $this;
+    }
 
+    public function getNbBooks(): int
+    {
+        return $this->nbBooks;
+    }
+
+    public function setNbBooks(int $nbBooks): self
+    {
+        $this->nbBooks = $nbBooks;
         return $this;
     }
 }
