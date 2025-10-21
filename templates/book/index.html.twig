@@ -1,19 +1,58 @@
 {% extends 'base.html.twig' %}
+
+{% block title %}Liste des livres{% endblock %}
+
 {% block body %}
-<h1>Liste des livres</h1>
-<a href="{{ path('book_new') }}">+ Ajouter un livre</a>
-<table border="1">
-<tr><th>Titre</th><th>Catégorie</th><th>Auteur</th><th>Publié</th><th>Actions</th></tr>
-{% for b in books %}
-<tr>
-  <td>{{ b.title }}</td>
-  <td>{{ b.category }}</td>
-  <td>{{ b.author.firstName }} {{ b.author.lastName }}</td>
-  <td>{{ b.published ? 'Oui' : 'Non' }}</td>
-  <td><a href="{{ path('book_delete', {id:b.id}) }}">Supprimer</a></td>
-</tr>
-{% else %}
-<tr><td colspan="5">Aucun livre trouvé</td></tr>
-{% endfor %}
-</table>
+    <h1>📚 Liste des livres</h1>
+
+    <a href="{{ path('book_add') }}" class="btn btn-success">➕ Ajouter un livre</a>
+
+    <br><br>
+
+    {% if books is empty %}
+        <p>Aucun livre trouvé.</p>
+    {% else %}
+        <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+            <thead style="background-color: #f0f0f0;">
+                <tr>
+                    <th>Titre</th>
+                    <th>Catégorie</th>
+                    <th>Auteur</th>
+                    <th>Publié</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for b in books %}
+                <tr>
+                    <td>{{ b.title }}</td>
+                    <td>{{ b.category }}</td>
+                    {# adapte selon les attributs exacts de ton entité Author #}
+                    <td>
+                        {% if b.author is not null %}
+                            {{ b.author.name is defined ? b.author.name : b.author.firstName ~ ' ' ~ b.author.lastName }}
+                        {% else %}
+                            <em>Auteur inconnu</em>
+                        {% endif %}
+                    </td>
+                    <td>{{ b.published ? 'Oui' : 'Non' }}</td>
+                    <td>
+                        <a href="{{ path('book_show', {id: b.id}) }}">👁️ Voir</a> |
+                        <a href="{{ path('book_edit', {id: b.id}) }}">✏️ Modifier</a> |
+                        <a href="{{ path('book_delete', {id: b.id}) }}" 
+                           onclick="return confirm('Voulez-vous vraiment supprimer ce livre ?');">
+                           🗑️ Supprimer
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <br>
+    <p>
+        <strong>Livres publiés :</strong> {{ publishedCount }} <br>
+        <strong>Livres non publiés :</strong> {{ unpublishedCount }}
+    </p>
 {% endblock %}
